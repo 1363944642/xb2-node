@@ -8,8 +8,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "target": "es2017",
-    "noImplicitAny": true,
-    "preserveConstEnums": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "sourceMap": true,
