@@ -1,15 +1,22 @@
+import { connection } from '../app/database/mysql';
 /**
  * 获取内容列表
  */
-export const getPosts = () => {
-  const data = [
-    {
-      content: '日出江华红胜火,春来江水绿如蓝',
-    },
-    {
-      content: '会当凌绝顶,一览众山小',
-    },
-  ];
+export const getPosts = async () => {
+  const statement = `
+    SELECT
+      post.id,
+      post.title,
+      post.content,
+      JSON_OBJECT(
+        'id', user.id,
+        'name', user.name
+      ) as user
+    FROM post
+    LEFT JOIN user
+      ON user.id = post.userId
+  `;
 
+  const [data] = await connection.promise().query(statement);
   return data;
 };

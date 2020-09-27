@@ -3,14 +3,15 @@ import { getPosts } from './post.service';
 /**
  * 内容列表
  */
-export const index = (
+export const index = async (
   request: Request,
   response: Response,
   next: NextFunction,
 ) => {
-  if (request.headers.authorization !== 'SECRET') {
-    return next(new Error());
+  try {
+    const posts = await getPosts();
+    response.send(posts);
+  } catch (error) {
+    next(error);
   }
-  const posts = getPosts();
-  response.send(posts);
 };
