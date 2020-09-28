@@ -1,7 +1,6 @@
 import express from 'express';
 import * as postController from './post.controller';
 import { requestUrl } from '../app/app.middleware';
-import { read } from 'fs';
 
 const router = express.Router();
 
@@ -10,9 +9,10 @@ const router = express.Router();
  */
 router.get('/posts', requestUrl, postController.index);
 
-router.post('/posts', function(req, res) {
-  res.send(req.body);
-});
+/**
+ * 创建内容
+ */
+router.post('/posts', postController.store);
 
 /**
  * 导出路由
