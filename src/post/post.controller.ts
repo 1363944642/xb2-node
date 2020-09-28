@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { getPosts, createPost } from './post.service';
+import _ from 'lodash';
+import { getPosts, createPost, updataPost, deletePost } from './post.service';
 /**
  * 内容列表
  */
@@ -30,6 +31,49 @@ export const store = async (
   try {
     const data = await createPost({ title, content });
     response.status(201).send(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * 更新内容
+ */
+export const update = async (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+  // 获取内容 ID
+  const { postId } = request.params;
+
+  // 准备数据
+  const post = _.pick(request.body, ['title', 'content']);
+
+  // 更新
+  try {
+    const data = await updataPost(parseInt(postId, 10), post);
+    response.send(data);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * 删除内容
+ */
+export const destroy = async (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+  //获取内容 ID
+  const { postId } = request.params;
+
+  //删除内容
+  try {
+    const data = await deletePost(parseInt(postId, 10));
+    response.send(data);
   } catch (error) {
     next(error);
   }

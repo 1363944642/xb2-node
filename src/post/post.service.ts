@@ -26,6 +26,7 @@ export const getPosts = async () => {
  * 创建内容
  */
 export const createPost = async (post: PostModel) => {
+  console.log(PostModel);
   // 准备查询
   const statement = `
     INSERT INTO post
@@ -33,6 +34,41 @@ export const createPost = async (post: PostModel) => {
   `;
   // 执行查询
   const [data] = await connection.promise().query(statement, post);
+
+  // 提供数据
+  return data;
+};
+
+/**
+ * 更新内容
+ */
+export const updataPost = async (postId: number, post: PostModel) => {
+  // 准备查询
+  const statement = `
+    UPDATE post
+    SET ?
+    WHERE id = ?
+  `;
+
+  // 执行查询
+  const [data] = await connection.promise().query(statement, [post, postId]);
+
+  // 提供数据
+  return data;
+};
+
+/**
+ * 删除内容
+ */
+export const deletePost = async (postId: number) => {
+  // 准备查询
+  const statement = `
+    DELETE FROM post
+    WHERE id = ? 
+  `;
+
+  // 执行查询
+  const [data] = await connection.promise().query(statement, postId);
 
   //提供数据
   return data;

@@ -9,7 +9,7 @@ const app = express();
 /**
  * 处理JSON
  */
-// app.use(express.json());
+app.use(express.json());
 
 /**
  * 路由

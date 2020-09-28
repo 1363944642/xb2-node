@@ -15,6 +15,16 @@ router.get('/posts', requestUrl, postController.index);
 router.post('/posts', postController.store);
 
 /**
+ * 更新内容
+ */
+router.patch('/posts/:postId', postController.update);
+
+/**
+ * 删除内容
+ */
+router.delete('/posts/:postId', postController.destroy);
+
+/**
  * 导出路由
  */
 export default router;
