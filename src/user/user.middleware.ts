@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction, request } from 'express';
-import bcrypt from 'bcrypt';
+import bcryptjs from 'bcryptjs';
 import * as userService from './user.service';
 
 /**
@@ -37,10 +37,9 @@ export const hashPassword = async (
 ) => {
   // 准备数据
   const { password } = request.body;
-  //   console.log(password);
+
   // HASH 密码
-  request.body.password = await bcrypt.hash(password, 10);
-  //   request.body.password = await bcrypt.hash(1223, 10);
+  request.body.password = await bcryptjs.hash(password, 10);
 
   //下一步
   next();
