@@ -21,10 +21,23 @@ export const createUser = async (user: UserModel) => {
 /**
  * 按用户名查找用户
  */
-export const getUserByName = async (name: string) => {
+interface GetUserOptions {
+  password?: boolean;
+}
+
+export const getUserByName = async (
+  name: string,
+  options: GetUserOptions = {},
+) => {
+  // 准备选项
+  const { password } = options;
+
   // 准备查询
   const statement = `
-    SELECT id, name
+    SELECT
+    id,
+    name
+    ${password ? ', password' : ''}
     FROM user
     WHERE name = ?
   `;
@@ -35,3 +48,21 @@ export const getUserByName = async (name: string) => {
   //提供数据
   return data[0];
 };
+//另一种写法
+// export const getUserByName = async (name: string, password?: boolean) => {
+//   // 准备查询
+//   const statement = `
+//     SELECT
+//     id,
+//     name
+//     ${password ? ', password' : ''}
+//     FROM user
+//     WHERE name = ?
+//   `;
+
+//   //执行查询
+//   const [data] = await connection.promise().query(statement, name);
+
+//   //提供数据
+//   return data[0];
+// };
