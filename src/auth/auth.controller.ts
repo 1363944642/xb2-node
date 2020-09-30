@@ -25,3 +25,15 @@ export const login = async (
     next(error);
   }
 };
+
+/**
+ * 验证登录
+ */
+export const validate = (
+  request: Request,
+  response: Response,
+  next: NextFunction,
+) => {
+  console.log(request.user);
+  response.sendStatus(200);
+};
