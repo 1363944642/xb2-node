@@ -32,7 +32,7 @@ export const possess = async (options: PossessOptions) => {
   // 准备选项
   const { resourceId, resourceType, userId } = options;
 
-  // 准备查询
+  // 准备查询 统计列数
   const statement = `
     SELECT COUNT(${resourceType}.id) as count
     FROM ${resourceType}

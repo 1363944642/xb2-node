@@ -23,12 +23,12 @@ export const validateLoginData = async (
   if (!name) return next(new Error('NAME_IS_REQUIRED'));
   if (!password) return next(new Error('PASSWORD_IS_REQUIRED'));
 
-  //验证用户名
+  //通过用户名查询数据库内的用户名和密码
   const user = await userService.getUserByName(name, { password: true });
   //另一种写法的调用   const user = await userService.getUserByName(name, true);
   if (!user) return next(new Error('USER_DOES_NOT_EXIST'));
 
-  //验证用户密码
+  //验证用户密码:把用户输入的密码与刚查到的数据库储存的密码比对
   const matched = await bcryptjs.compare(password, user.password);
   if (!matched) return next(new Error('PASSWORD_DOES_NOT_MATCH'));
 

@@ -5,6 +5,8 @@ const router = express.Router();
 
 /**
  * 用户登录
+ * validateLoginData:验证用户登录数据
+ * authController.login: 签发令牌给客户端
  */
 router.post('/login', validateLoginData, authController.login);
 
