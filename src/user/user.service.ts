@@ -44,7 +44,7 @@ export const getUserByName = async (
 
   //执行查询
   const [data] = await connection.promise().query(statement, name);
-  console.log(data[0]);
+
   //提供数据
   return data[0];
 };
