@@ -45,6 +45,7 @@ router.delete(
 
 /**
  * 添加内容标签
+ * 参数: 1.:postId(内容id) 2.body:name(标签名)
  * authGuard:通过公钥验证客户端令牌,并得到令牌中的用户信息存放在请求处理参数中
  * accessControl:查询postId(要添加内容标签的内容id)与当前登陆的令牌中的用户信息在数据库键值对关系是否匹配
  * postController.storePostTag:判断标签是否存在,如果存在,则判断存在则验证内容与标签是否已经关联,如果没关联则关联起来(把内容id与标签id关联添加到post_tag数据表)
@@ -59,6 +60,7 @@ router.post(
 
 /**
  * 移除内容标签
+ * 参数: 1.:postId(内容id) 2.body:tagId(标签Id)
  * authGuard:通过公钥验证客户端令牌,并得到令牌中的用户信息存放在请求处理参数中
  * accessControl:查询postId(要删除内容标签的内容id)与当前登陆的令牌中的用户信息在数据库键值对关系是否匹配
  * postController.destroyPostTag: 按照标签id与内容id删除post_tag数据表里的数据
