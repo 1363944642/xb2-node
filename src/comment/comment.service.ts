@@ -34,3 +34,41 @@ export const isReplyComment = async (commentId: number) => {
   //返回结果
   return data[0].parentId ? true : false;
 };
+
+/**
+ * 修改评论
+ */
+export const updateComment = async (comment: CommentMdoel) => {
+  //准备数据
+  const { id, content } = comment;
+
+  //准备查询
+  const statement = `
+    UPDATE comment
+    SET content = ?
+    WHERE id = ?
+  `;
+
+  //执行查询
+  const [data] = await connection.promise().query(statement, [content, id]);
+
+  //提供数据
+  return data;
+};
+
+/**
+ * 删除评论
+ */
+export const deleteComment = async (commentId: number) => {
+  //准备查询
+  const statement = `
+    DELETE FROM comment
+    WHERE id = ?
+  `;
+
+  //执行查询
+  const [data] = await connection.promise().query(statement, commentId);
+
+  //提供数据
+  return data;
+};
