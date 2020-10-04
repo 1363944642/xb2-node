@@ -126,7 +126,6 @@ export const storePostTag = async (
     try {
       const data = await createTag({ name });
       tag = { id: data.insertId };
-      console.log(data.insertId);
     } catch (error) {
       return next(error);
     }
