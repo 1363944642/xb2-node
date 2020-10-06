@@ -7,6 +7,8 @@ const router = express.Router();
 
 /**
  * 内容列表
+ * sort:排序方式
+ * filter:过滤列表
  */
 router.get('/posts', sort, filter, postController.index);
 

@@ -3,7 +3,7 @@ import { PostModel } from './post.model';
 import { sqlFragment } from './post.provider';
 /**
  * 获取内容列表
- * options:用于如何排序的参数
+ * options:用于如何排序 / 过滤的参数
  */
 export interface GetPostsOptionsFilter {
   name: string;
@@ -11,7 +11,7 @@ export interface GetPostsOptionsFilter {
   param?: string;
 }
 
-//用于排序
+//用于排序/过滤
 interface GetPostsOptions {
   sort?: string;
   filter?: GetPostsOptionsFilter;
