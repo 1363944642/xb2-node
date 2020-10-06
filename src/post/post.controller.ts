@@ -20,7 +20,10 @@ export const index = async (
   next: NextFunction,
 ) => {
   try {
-    const posts = await getPosts({ sort: request.sort });
+    const posts = await getPosts({
+      sort: request.sort,
+      filter: request.filter,
+    });
     response.send(posts);
   } catch (error) {
     next(error);
