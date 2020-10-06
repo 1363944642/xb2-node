@@ -3,7 +3,7 @@ import { PostModel } from './post.model';
 import { sqlFragment } from './post.provider';
 /**
  * 获取内容列表
- * options:用于如何排序 / 过滤的参数
+ * options:用于如何排序 / 过滤的参数 / 统计内容数量
  */
 export interface GetPostsOptionsFilter {
   name: string;
@@ -11,17 +11,28 @@ export interface GetPostsOptionsFilter {
   param?: string;
 }
 
-//用于排序/过滤
+//分页数据 limit:每页的数量 offset:偏移量
+export interface GetPostsOptionsPagination {
+  limit: number;
+  offset: number;
+}
+
+//用于排序/过滤/分页
 interface GetPostsOptions {
   sort?: string;
   filter?: GetPostsOptionsFilter;
+  pagination?: GetPostsOptionsPagination;
 }
 
 export const getPosts = async (options: GetPostsOptions) => {
-  const { sort, filter } = options;
+  const {
+    sort,
+    filter,
+    pagination: { limit, offset },
+  } = options;
 
   //SQL 参数
-  let params: Array<any> = [];
+  let params: Array<any> = [limit, offset];
 
   //设置SQL参数
   if (filter.param) {
@@ -44,6 +55,8 @@ export const getPosts = async (options: GetPostsOptions) => {
     WHERE ${filter.sql}
     GROUP BY post.id
     ORDER BY ${sort}
+    LIMIT ?
+    OFFSET ?
   `;
 
   const [data] = await connection.promise().query(statement, params);
@@ -151,4 +164,31 @@ export const deletePostTag = async (postId: number, tagId: number) => {
 
   //提供数据
   return data;
+};
+
+/**
+ * 统计内容数量
+ */
+export const getPostsToralCount = async (options: GetPostsOptions) => {
+  const { filter } = options;
+
+  //SQL 参数
+  let params = [filter.param];
+
+  //准备查询
+  const statement = `
+    SELECT
+      COUNT(DISTINCT post.id) AS total
+    FROM post
+    ${sqlFragment.leftJoinUser}
+    ${sqlFragment.leftJoinOneFile}
+    ${sqlFragment.leftJoinTag}
+    WHERE ${filter.sql}
+  `;
+
+  //执行查询
+  const [data] = await connection.promise().query(statement, params);
+
+  //提供结果
+  return data[0].total;
 };
