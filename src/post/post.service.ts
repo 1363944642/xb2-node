@@ -1,21 +1,33 @@
 import { connection } from '../app/database/mysql';
 import { PostModel } from './post.model';
+import { sqlFragment } from './post.provider';
 /**
  * 获取内容列表
+ * options:用于如何排序的参数
  */
-export const getPosts = async () => {
+//用于排序
+interface GetPostsOptions {
+  sort?: string;
+}
+
+export const getPosts = async (options: GetPostsOptions) => {
+  const { sort } = options;
+
   const statement = `
     SELECT
       post.id,
       post.title,
       post.content,
-      JSON_OBJECT(
-        'id', user.id,
-        'name', user.name
-      ) as user
+      ${sqlFragment.user},
+      ${sqlFragment.totalComments},
+      ${sqlFragment.file},
+      ${sqlFragment.tags}  
     FROM post
-    LEFT JOIN user
-      ON user.id = post.userId
+    ${sqlFragment.leftJoinUser}
+    ${sqlFragment.leftJoinOneFile}
+    ${sqlFragment.leftJoinTag}
+    GROUP BY post.id
+    ORDER BY ${sort}
   `;
 
   const [data] = await connection.promise().query(statement);
