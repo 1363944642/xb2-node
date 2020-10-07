@@ -4,7 +4,7 @@ import bcryptjs from 'bcryptjs';
 import * as userService from '../user/user.service';
 import { PUBLIC_KEY } from '../app/app.config';
 import { TokenPayload } from './auth.interface';
-import { possess } from './auth.service';
+import { possess, possessFile } from './auth.service';
 
 /**
  * 验证用户登录数据
@@ -102,6 +102,43 @@ export const accessControl = (options: AccessControlOptions) => {
     if (possession) {
       try {
         const ownResource = await possess({ resourceId, resourceType, userId });
+
+        if (!ownResource) {
+          return next(new Error('USER_DOES_NOT_OWN_RESOURCE'));
+        }
+      } catch (error) {
+        return next(error);
+      }
+    }
+
+    next();
+  };
+};
+
+/**
+ * 上传文件的访问控制
+ */
+
+export const accessControlFile = (options: AccessControlOptions) => {
+  return async (request: Request, response: Response, next: NextFunction) => {
+    console.log('👮 访问控制');
+
+    //解构选项
+    const { possession } = options;
+
+    //当前用户 ID
+    const { id: userId } = request.user;
+
+    // 放行管理员
+    if (userId == 1) return next();
+
+    // 准备资源
+    const postId = request.query.post; //获取资源id参数:postId
+
+    // 检查资源拥有权
+    if (possession) {
+      try {
+        const ownResource = await possessFile(`${postId}`, `${userId}`);
 
         if (!ownResource) {
           return next(new Error('USER_DOES_NOT_OWN_RESOURCE'));

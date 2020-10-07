@@ -1,5 +1,5 @@
 import express from 'express';
-import { authGuard } from '../auth/auth.middleware';
+import { authGuard, accessControlFile } from '../auth/auth.middleware';
 import { fileInterceptor, fileProcessor } from './file.middleware';
 import * as fileController from './file.controller';
 
@@ -15,6 +15,7 @@ const router = express.Router();
 router.post(
   '/files',
   authGuard,
+  accessControlFile({ possession: true }),
   fileInterceptor,
   fileProcessor,
   fileController.store,
