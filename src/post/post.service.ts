@@ -47,11 +47,13 @@ export const getPosts = async (options: GetPostsOptions) => {
       ${sqlFragment.user},
       ${sqlFragment.totalComments},
       ${sqlFragment.file},
-      ${sqlFragment.tags}  
+      ${sqlFragment.tags},
+      ${sqlFragment.totalLikes}
     FROM post
     ${sqlFragment.leftJoinUser}
     ${sqlFragment.leftJoinOneFile}
     ${sqlFragment.leftJoinTag}
+    ${filter.name == 'userLiked' ? sqlFragment.innerJoinUserLikePost : ''}
     WHERE ${filter.sql}
     GROUP BY post.id
     ORDER BY ${sort}
@@ -60,6 +62,7 @@ export const getPosts = async (options: GetPostsOptions) => {
   `;
 
   const [data] = await connection.promise().query(statement, params);
+
   return data;
 };
 
@@ -67,7 +70,6 @@ export const getPosts = async (options: GetPostsOptions) => {
  * 创建内容
  */
 export const createPost = async (post: PostModel) => {
-  console.log(PostModel);
   // 准备查询
   const statement = `
     INSERT INTO post
@@ -183,6 +185,7 @@ export const getPostsToralCount = async (options: GetPostsOptions) => {
     ${sqlFragment.leftJoinUser}
     ${sqlFragment.leftJoinOneFile}
     ${sqlFragment.leftJoinTag}
+    ${filter.name == 'userLiked' ? sqlFragment.innerJoinUserLikePost : ''}
     WHERE ${filter.sql}
   `;
 
