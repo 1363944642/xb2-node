@@ -35,7 +35,7 @@ export const filter = async (
     };
   }
 
-  //用户的恢复
+  //用户的回复
   if (user && action == 'replied' && !post) {
     request.filter = {
       name: 'userReplied',
